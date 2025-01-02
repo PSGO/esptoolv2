@@ -43,51 +43,7 @@ jobs:
           FILES=$(echo $RAW_TEXT | tr -d '[]\\"' | tr ',' '\n')
 
           # 定义关键字
-          KEYWORDS=(
-  "stub_flasher_32.bc06e557.js"
-  "35K3k"
-  "stub_flasher_32c2.63c0ddda.js"
-  "vZCF2"
-  "stub_flasher_32c3.1f4c3acb.js"
-  "d4LkX"
-  "stub_flasher_32c5.2d91a6ff.js"
-  "cJDqv"
-  "stub_flasher_32c6.7e3cbb90.js"
-  "3OCVy"
-  "stub_flasher_32c61.82908af8.js"
-  "eXP7h"
-  "stub_flasher_32h2.42b7a893.js"
-  "fa8eB"
-  "stub_flasher_32p4.90dd8add.js"
-  "9N6hS"
-  "stub_flasher_32s2.38b7c15e.js"
-  "gmXBg"
-  "stub_flasher_32s3.d91381f3.js"
-  "hHpLC"
-  "stub_flasher_8266.4f4307c8.js"
-  "gbY4J"
-  "esp32.3f2660d9.js"
-  "jJvTY"
-  "esp32c2.11753622.js"
-  "ELGPK"
-  "esp32c3.566f2292.js"
-  "8itJW"
-  "esp32c6.5b449d27.js"
-  "3qJU9"
-  "esp32c61.7aaa628f.js"
-  "fk33s"
-  "esp32c5.9aff0e3e.js"
-  "dJVWW"
-  "esp32h2.a06e4253.js"
-  "at51o"
-  "esp32s3.e35b3ad8.js"
-  "2pBtn"
-  "esp32s2.315a8ac7.js"
-  "cXe3K"
-  "esp8266.29587a4a.js"
-  "i7djm"
-  "esp32p4.433a1fb3.js"
-)
+          KEYWORDS=("stub_flasher_32" "stub_flasher_32c2" "stub_flasher_32c3" "stub_flasher_32c5" "stub_flasher_32c6" "stub_flasher_32c61" "stub_flasher_32h2" "stub_flasher_32p4" "stub_flasher_32s2" "stub_flasher_32s3" "stub_flasher_8266" "esp32" "esp32c2" "esp32c3" "esp32c6" "esp32c61" "esp32c5" "esp32h2" "esp32s3" "esp32s2" "esp8266" "esp32p4")
 
 
           # 遍历文件并匹配关键字
