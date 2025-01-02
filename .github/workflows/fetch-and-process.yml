@@ -39,38 +39,25 @@ jobs:
 
       - name: Extract and Download Specific JS Files
         run: |
-          # 提取嵌套 JSON 数据
-          JSON_RAW=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js)
+        # 原始 JSON 数据
+        RAW_TEXT=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '\\"')
 
-          # 打印提取的原始 JSON 数据（用于调试）
-          echo "Raw JSON Data: $JSON_RAW"
+        # 转换为纯文本方式处理
+        FILES=$(echo $RAW_TEXT | tr -d '[],"')
 
-          # 转换为合法 JSON
-          JSON_CLEAN=$(echo $JSON_RAW | sed 's/\\"/"/g' | jq '.')
+        # 定义关键字
+        KEYWORDS=("esp32s2" "esp8266" "stub_flasher_32s2" "stub_flasher_8266")
 
-          # 打印清理后的 JSON 数据（用于调试）
-          echo "Clean JSON Data: $JSON_CLEAN"
-
-          # 使用 jq 解析 JSON 数据并提取文件列表
-          echo $JSON_CLEAN | jq -r '.[] | select(endswith(".js"))' > file_list.txt
-
-          # 打印提取的文件列表（用于调试）
-          echo "File List:"
-          cat file_list.txt
-
-          # 关键字数组
-          KEYWORDS=("esp32s2" "esp8266" "stub_flasher_32s2" "stub_flasher_8266")
-
-          # 下载包含关键字的文件
-          while read -r FILE; do
-            for KEY in "${KEYWORDS[@]}"; do
-              if [[ $FILE == *"$KEY"* ]]; then
-                FILE_URL="https://espressif.github.io/esptool-js/$FILE"
-                echo "Downloading $FILE_URL"
-                curl -s $FILE_URL -o $(basename $FILE)
-              fi
-            done
-          done < file_list.txt
+        # 遍历文件并匹配关键字
+        for FILE in $FILES; do
+          for KEY in "${KEYWORDS[@]}"; do
+            if [[ $FILE == *"$KEY"* ]]; then
+              FILE_URL="https://espressif.github.io/esptool-js/$FILE"
+              echo "Downloading $FILE_URL"
+              curl -s $FILE_URL -o $(basename $FILE)
+            fi
+          done
+        done
 
       - name: Commit and Push Changes
         env:
