@@ -46,22 +46,23 @@ jobs:
           echo "Raw JSON Data: $JSON_RAW"
 
           # 清理数据，去除多余的转义符和引号
-          JSON_CLEAN=$(echo $JSON_RAW | sed 's/\\"/"/g' | sed 's/^"//' | sed 's/"$//')
+          JSON_CLEAN=$(echo $JSON_RAW | sed 's/\\"/"/g' | tr -d '\n')
 
           # 验证清理后的 JSON 数据
           echo "Clean JSON Data: $JSON_CLEAN"
 
           # 使用 jq 解析 JSON 数据并提取文件列表
-          FILE_LIST=$(echo $JSON_CLEAN | jq -r '.[] | select(endswith(".js"))')
+          echo $JSON_CLEAN | jq -r '.[] | select(endswith(".js"))' > file_list.txt
 
           # 打印提取的文件列表（用于调试）
-          echo "File List: $FILE_LIST"
+          echo "File List:"
+          cat file_list.txt
 
           # 关键字数组
           KEYWORDS=("esp32s2" "esp8266" "stub_flasher_32s2" "stub_flasher_8266")
 
           # 下载包含关键字的文件
-          for FILE in $FILE_LIST; do
+          while read -r FILE; do
             for KEY in "${KEYWORDS[@]}"; do
               if [[ $FILE == *"$KEY"* ]]; then
                 FILE_URL="https://espressif.github.io/esptool-js/$FILE"
@@ -69,7 +70,7 @@ jobs:
                 curl -s $FILE_URL -o $(basename $FILE)
               fi
             done
-          done
+          done < file_list.txt
 
       - name: Commit and Push Changes
         env:
