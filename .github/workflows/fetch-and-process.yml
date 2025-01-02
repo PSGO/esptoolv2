@@ -56,9 +56,11 @@ jobs:
           for FILE in $FILES; do
             for KEY in "${KEYWORDS[@]}"; do
               if [[ $FILE == *"$KEY"* ]]; then
-                FILE_URL="https://espressif.github.io/esptool-js/$FILE"
+                # 清理文件名，移除多余字符
+                CLEAN_FILE=$(echo "$FILE" | sed 's/[()<>]//g')
+                FILE_URL="https://espressif.github.io/esptool-js/$CLEAN_FILE"
                 echo "Downloading $FILE_URL"
-                curl -s $FILE_URL -o $(basename $FILE)
+                curl -s "$FILE_URL" -o "$(basename $CLEAN_FILE)"
               fi
             done
           done
