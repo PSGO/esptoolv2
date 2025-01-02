@@ -1,4 +1,4 @@
-name: Fetch and Process JS Files
+name: Fetch Specific JS Files
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # 手动触发
 
 jobs:
-  fetch-and-process:
+  fetch-specific-js:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,39 +37,27 @@ jobs:
           # 修改文件名为 index.js
           mv main.js index.js
 
-      - name: Parse and Validate JSON Data
-        id: validate_json
+      - name: Extract and Download Specific JS Files
         run: |
           # 提取嵌套 JSON 数据
-          JSON_RAW=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '\\"')
-
-          # 打印调试信息
-          echo "Extracted JSON: $JSON_RAW"
-
-          # 验证 JSON 格式
-          echo $JSON_RAW | jq . > /dev/null
-          echo "Validated JSON successfully"
-
-          # 保存为环境变量
-          echo "JSON_DATA=$JSON_RAW" >> $GITHUB_ENV
-
-      - name: Download All JS Files
-        run: |
-          # 从环境变量中加载 JSON 数据
-          JSON_DATA=${{ env.JSON_DATA }}
+          JSON_DATA=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '\\"')
 
           # 将 JSON 数据转换为文件列表
           FILE_LIST=$(echo $JSON_DATA | jq -r '.[] | select(endswith(".js"))')
 
-          # 遍历并下载所有 .js 文件
-          for FILE in $FILE_LIST; do
-            FILE_URL="https://espressif.github.io/esptool-js/$FILE"
-            echo "Downloading $FILE_URL"
-            curl -s $FILE_URL -o $(basename $FILE)
-          done
+          # 关键字数组
+          KEYWORDS=("esp32s2" "esp8266" "stub_flasher_32s2" "stub_flasher_8266")
 
-          # 修改 index.js 中的内容
-          sed -i 's/element1\.value = "0x1000";/element1.value = "0x0000";/' index.js
+          # 下载包含关键字的文件
+          for FILE in $FILE_LIST; do
+            for KEY in "${KEYWORDS[@]}"; do
+              if [[ $FILE == *"$KEY"* ]]; then
+                FILE_URL="https://espressif.github.io/esptool-js/$FILE"
+                echo "Downloading $FILE_URL"
+                curl -s $FILE_URL -o $(basename $FILE)
+              fi
+            done
+          done
 
       - name: Commit and Push Changes
         env:
@@ -79,5 +67,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add .
-          git commit -m "Update JS files and modify index.js"
+          git commit -m "Download specific JS files and update index.js"
           git push
