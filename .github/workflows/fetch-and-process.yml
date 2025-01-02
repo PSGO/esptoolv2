@@ -32,32 +32,29 @@ jobs:
         id: download_main
         run: |
           # 下载主 JS 文件
-          curl -s ${{ env.FULL_URL }} -o main.js
-
-          # 修改文件名为 index.js
-          mv main.js index.js
+          curl -s ${{ env.FULL_URL }} -o index.js
 
       - name: Extract and Download Specific JS Files
         run: |
-        # 原始 JSON 数据
-        RAW_TEXT=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '\\"')
+          # 提取嵌套 JSON 数据
+          RAW_TEXT=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '\\"')
 
-        # 转换为纯文本方式处理
-        FILES=$(echo $RAW_TEXT | tr -d '[],"')
+          # 将文本转换为文件名列表
+          FILES=$(echo $RAW_TEXT | tr -d '[],"')
 
-        # 定义关键字
-        KEYWORDS=("esp32s2" "esp8266" "stub_flasher_32s2" "stub_flasher_8266")
+          # 定义关键字
+          KEYWORDS=("esp32s2" "esp8266" "stub_flasher_32s2" "stub_flasher_8266")
 
-        # 遍历文件并匹配关键字
-        for FILE in $FILES; do
-          for KEY in "${KEYWORDS[@]}"; do
-            if [[ $FILE == *"$KEY"* ]]; then
-              FILE_URL="https://espressif.github.io/esptool-js/$FILE"
-              echo "Downloading $FILE_URL"
-              curl -s $FILE_URL -o $(basename $FILE)
-            fi
+          # 遍历文件并匹配关键字
+          for FILE in $FILES; do
+            for KEY in "${KEYWORDS[@]}"; do
+              if [[ $FILE == *"$KEY"* ]]; then
+                FILE_URL="https://espressif.github.io/esptool-js/$FILE"
+                echo "Downloading $FILE_URL"
+                curl -s $FILE_URL -o $(basename $FILE)
+              fi
+            done
           done
-        done
 
       - name: Commit and Push Changes
         env:
