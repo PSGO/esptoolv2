@@ -1,0 +1,62 @@
+name: Fetch and Process JS Files
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # 每天 00:00 执行
+  workflow_dispatch: # 手动触发
+
+jobs:
+  fetch-and-process:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Fetch HTML and Extract Script URL
+        id: fetch_html
+        run: |
+          # 下载 HTML 文件
+          curl -s https://espressif.github.io/esptool-js/ -o page.html
+
+          # 提取动态生成的 JS 文件路径
+          SCRIPT_URL=$(grep -oP '(?<=<script src=")index\.\w+\.js(?=" type="module"></script>)' page.html)
+
+          # 拼接完整 URL
+          FULL_URL="https://espressif.github.io/esptool-js/$SCRIPT_URL"
+
+          echo "SCRIPT_URL=$SCRIPT_URL" >> $GITHUB_ENV
+          echo "FULL_URL=$FULL_URL" >> $GITHUB_ENV
+
+      - name: Download Main JS File
+        run: |
+          # 下载主 JS 文件
+          curl -s $FULL_URL -o main.js
+
+          # 修改文件名为 index.js
+          mv main.js index.js
+
+          # 修改内容，将 0x1000 替换为 0x0000
+          sed -i 's/element1\.value = "0x1000";/element1.value = "0x0000";/' index.js
+
+      - name: Parse and Download All JS Files
+        run: |
+          # 提取嵌套 JSON 数据
+          JSON_DATA=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '"')
+
+          # 转换为文件列表并下载
+          for FILE in $(echo $JSON_DATA | jq -r '.[] | select(endswith(".js"))'); do
+            FILE_URL="https://espressif.github.io/esptool-js/$FILE"
+            curl -s $FILE_URL -o $(basename $FILE)
+          done
+
+      - name: Commit and Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add .
+          git commit -m "Update JS files and modify index.js"
+          git push
