@@ -49,7 +49,7 @@ jobs:
           FILES=$(echo $RAW_TEXT | tr -d '[]\\"' | tr ',' '\n')
 
           # 定义关键字
-          KEYWORDS=("stub_flasher_32" "stub_flasher_32c2" "stub_flasher_32c3" "stub_flasher_32c5" "stub_flasher_32c6" "stub_flasher_32c61" "stub_flasher_32h2" "stub_flasher_32p4" "stub_flasher_32s2" "stub_flasher_32s3" "stub_flasher_8266" "esp32" "esp32c2" "esp32c3" "esp32c6" "esp32c61" "esp32c5" "esp32h2" "esp32s3" "esp32s2" "esp8266" "esp32p4" "esp0" )
+          KEYWORDS=("stub_flasher_32" "stub_flasher_32c2" "stub_flasher_32c3" "stub_flasher_32c5" "stub_flasher_32c6" "stub_flasher_32c61" "stub_flasher_32h2" "stub_flasher_32p4" "stub_flasher_32s2" "stub_flasher_32s3" "stub_flasher_8266" "esp32" "esp32c2" "esp32c3" "esp32c6" "esp32c61" "esp32c5" "esp32h2" "esp32s3" "esp32s2" "esp8266" "esp32p4")
 
 
           # 遍历文件并匹配关键字
