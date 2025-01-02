@@ -32,9 +32,12 @@ jobs:
         id: download_main
         run: |
           # 下载主 JS 文件
-          curl -s ${{ env.FULL_URL }} -o index.js
-         
-         # 修改内容，将 0x1000 替换为 0x0000
+          curl -s $FULL_URL -o main.js
+
+          # 修改文件名为 index.js
+          mv main.js index.js
+
+          # 修改内容，将 0x1000 替换为 0x0000
           sed -i 's/element1\.value = "0x1000";/element1.value = "0x0000";/' index.js
 
       - name: Extract and Download Specific JS Files
