@@ -37,10 +37,10 @@ jobs:
       - name: Extract and Download Specific JS Files
         run: |
           # 提取嵌套 JSON 数据
-          RAW_TEXT=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '\\"')
+          RAW_TEXT=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js)
 
-          # 将文本转换为文件名列表
-          FILES=$(echo $RAW_TEXT | tr -d '[],"')
+          # 清理数据并转换为文件名列表
+          FILES=$(echo $RAW_TEXT | tr -d '[]\\"' | tr ',' '\n')
 
           # 定义关键字
           KEYWORDS=("esp32s2" "esp8266" "stub_flasher_32s2" "stub_flasher_8266")
