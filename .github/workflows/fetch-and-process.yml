@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Fetch HTML and Extract Script URL
+      - name: Fetch HTML and Extract Main JS URL
         id: fetch_html
         run: |
           # 下载 HTML 文件
@@ -29,26 +29,31 @@ jobs:
           echo "FULL_URL=$FULL_URL" >> $GITHUB_ENV
 
       - name: Download Main JS File
+        id: download_main
         run: |
           # 下载主 JS 文件
-          curl -s $FULL_URL -o main.js
+          curl -s ${{ env.FULL_URL }} -o main.js
 
           # 修改文件名为 index.js
           mv main.js index.js
 
-          # 修改内容，将 0x1000 替换为 0x0000
-          sed -i 's/element1\.value = "0x1000";/element1.value = "0x0000";/' index.js
-
       - name: Parse and Download All JS Files
         run: |
           # 提取嵌套 JSON 数据
-          JSON_DATA=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '"')
+          JSON_DATA=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js | tr -d '\\"')
 
-          # 转换为文件列表并下载
-          for FILE in $(echo $JSON_DATA | jq -r '.[] | select(endswith(".js"))'); do
+          # 将 JSON 数据转换为文件列表
+          FILE_LIST=$(echo $JSON_DATA | jq -r '.[] | select(endswith(".js"))')
+
+          # 遍历并下载所有 .js 文件
+          for FILE in $FILE_LIST; do
             FILE_URL="https://espressif.github.io/esptool-js/$FILE"
+            echo "Downloading $FILE_URL"
             curl -s $FILE_URL -o $(basename $FILE)
           done
+
+          # 修改 index.js 中的内容
+          sed -i 's/element1\.value = "0x1000";/element1.value = "0x0000";/' index.js
 
       - name: Commit and Push Changes
         env:
