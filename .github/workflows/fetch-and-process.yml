@@ -45,10 +45,10 @@ jobs:
           # 打印提取的原始 JSON 数据（用于调试）
           echo "Raw JSON Data: $JSON_RAW"
 
-          # 清理数据，去除多余的转义符和引号
-          JSON_CLEAN=$(echo $JSON_RAW | sed 's/\\"/"/g' | tr -d '\n')
+          # 转换为合法 JSON
+          JSON_CLEAN=$(echo $JSON_RAW | sed 's/\\"/"/g' | jq '.')
 
-          # 验证清理后的 JSON 数据
+          # 打印清理后的 JSON 数据（用于调试）
           echo "Clean JSON Data: $JSON_CLEAN"
 
           # 使用 jq 解析 JSON 数据并提取文件列表
