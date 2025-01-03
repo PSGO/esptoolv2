@@ -2,7 +2,7 @@ name: Fetch Specific JS Files
 
 on:
   schedule:
-    - cron: "0 0 * * *" # 每天运行一次
+    - cron: "0 0 * * 1" # 每周一 00:00 运行
   workflow_dispatch: # 手动触发
 
 jobs:
@@ -13,59 +13,50 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Get the latest commit hash from GitHub
-        id: get_commit
-        run: |
-          latest_commit=$(curl -s https://api.github.com/repos/espressif/esptool-js/commits/main | jq -r '.sha')
-          echo "Latest commit hash: $latest_commit"
-          echo $latest_commit > log/latest_commit.txt
-
-      - name: Ensure previous_commit.txt exists
-        run: |
-          mkdir -p log
-          if [ ! -f log/previous_commit.txt ]; then
-            echo "no_previous_commit" > log/previous_commit.txt
-          fi
-
-      - name: Compare with previous commit and set skip variable
-        id: check_commit
-        run: |
-          latest_commit=$(cat log/latest_commit.txt)
-          previous_commit=$(cat log/previous_commit.txt)
-          if [ "$latest_commit" == "$previous_commit" ]; then
-            echo "skip=true" >> $GITHUB_ENV
-          else
-            echo "skip=false" >> $GITHUB_ENV
-          fi
-
       - name: Fetch HTML and Extract Main JS URL
-        if: ${{ env.skip != 'true' }}
         id: fetch_html
         run: |
+          # 下载 HTML 文件
           curl -s https://espressif.github.io/esptool-js/ -o page.html
+
+          # 提取动态生成的 JS 文件路径
           SCRIPT_URL=$(grep -oP '(?<=<script src=")index\.\w+\.js(?=" type="module"></script>)' page.html)
+
+          # 拼接完整 URL
           FULL_URL="https://espressif.github.io/esptool-js/$SCRIPT_URL"
+
           echo "SCRIPT_URL=$SCRIPT_URL" >> $GITHUB_ENV
           echo "FULL_URL=$FULL_URL" >> $GITHUB_ENV
 
       - name: Download Main JS File
-        if: ${{ env.skip != 'true' }}
         id: download_main
         run: |
+          # 下载主 JS 文件
           curl -s $FULL_URL -o main.js
+
+          # 修改文件名为 index.js
           mv main.js index.js
+
+          # 修改内容，将 0x1000 替换为 0x0000
           sed -i 's/element1\.value = "0x1000";/element1.value = "0x0000";/' index.js
 
       - name: Extract and Download Specific JS Files
-        if: ${{ env.skip != 'true' }}
         run: |
+          # 提取嵌套 JSON 数据
           RAW_TEXT=$(grep -oP 'JSON\.parse\(\K.*(?=\);)' index.js)
+
+          # 清理数据并转换为文件名列表
           FILES=$(echo $RAW_TEXT | tr -d '[]\\"' | tr ',' '\n')
+
+          # 定义关键字
           KEYWORDS=("stub_flasher_32" "stub_flasher_32c2" "stub_flasher_32c3" "stub_flasher_32c5" "stub_flasher_32c6" "stub_flasher_32c61" "stub_flasher_32h2" "stub_flasher_32p4" "stub_flasher_32s2" "stub_flasher_32s3" "stub_flasher_8266" "esp32" "esp32c2" "esp32c3" "esp32c6" "esp32c61" "esp32c5" "esp32h2" "esp32s3" "esp32s2" "esp8266" "esp32p4")
 
+
+          # 遍历文件并匹配关键字
           for FILE in $FILES; do
             for KEY in "${KEYWORDS[@]}"; do
               if [[ $FILE == *"$KEY"* ]]; then
+                # 清理文件名，移除多余字符
                 CLEAN_FILE=$(echo "$FILE" | sed 's/[()<>]//g')
                 FILE_URL="https://espressif.github.io/esptool-js/$CLEAN_FILE"
                 echo "Downloading $FILE_URL"
@@ -75,20 +66,12 @@ jobs:
           done
 
       - name: Commit and Push Changes
-        if: ${{ env.skip != 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add .
           git commit -m "Download specific JS files and update index.js"
-          git push
-
-      - name: Update commit hash log
-        if: ${{ env.skip != 'true' }}
-        run: |
-          echo "$(cat log/latest_commit.txt)" > log/previous_commit.txt
-          git add log/previous_commit.txt
-          git commit -m "Update commit hash records"
           git push
