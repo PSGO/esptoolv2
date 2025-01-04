@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>ESP Web Flasher v2 - PSGO</title>
+        <title>ESP Tool</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
         <link
             href="https://fonts.googleapis.com/css?family=Orbitron"
             rel="stylesheet"
         />
-        <!-- <link rel="icon" href="../assets/favicon.ico" /> -->
+        <link rel="icon" href="../assets/favicon.ico" />
          <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
          <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -62,7 +62,6 @@ document.onreadystatechange = function () {
                 <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Disconnect" />
                 <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Erase Flash" />
 				<input class="btn btn-info btn-sm" type="button" id="copyTraceButton" value="Copy Trace" />
-				<input class="btn btn-warning btn-sm" type="button" id="addFile" value="Add more files" />
                 <br>
 
                 <div class="alert alert-danger alert-dismissible" id="alertDiv" style="display:none; margin-top:10px">
@@ -83,8 +82,8 @@ document.onreadystatechange = function () {
                         </tbody>
                     </table>
                     <!-- <input class="btn btn-info btn-sm" type="button" id="addFile" value="Add File" /> -->
-					<input class="btn btn-info btn-sm" type="button" id="programButton" value="Start Flashing" />
-                    <!-- <input class="btn btn-warning btn-sm" type="button" id="addFile" value="Add more files" /> -->
+					<input class="btn btn-info btn-sm" type="button" id="programButton" value="Start flashing" />
+                    <input class="btn btn-warning btn-sm" type="button" id="addFile" value="Add more files" />
                 </div>
                 <output id="list"></output>
                 <hr/>
