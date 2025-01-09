@@ -5,43 +5,38 @@
         <title>ESP Web Flasher v2 - PSGO</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
-        <link
-            href="https://fonts.googleapis.com/css?family=Orbitron"
-            rel="stylesheet"
-        />
-        <!-- <link rel="icon" href="../assets/favicon.ico" /> -->
-         <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
-         <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script>
-document.onreadystatechange = function () {
-   if (document.readyState == "complete") {
-        //document.body.style.display = "block";
-	    $('body').show(1000);
-	    $('#loading').hide(500);//关闭动画
-   }else{
-        //document.body.style.display = "none";
-	    $('body').hide(500);
-	    loading(1);//加载动画
-   };
-};
-</script>
+        <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script>
+            // Detect user language and redirect to Chinese page if necessary
+            document.addEventListener("DOMContentLoaded", function () {
+                var userLang = navigator.language || navigator.userLanguage; // Get the browser language
+                if (userLang.includes("zh")) {
+                    window.location.href = "index_zh.html"; // Redirect to Chinese page if the language is Chinese
+                }
+
+                // Language switch functionality
+                $('#switchToChinese').click(function () {
+                    window.location.href = "index_zh.html"; // Switch to Chinese page when clicked
+                });
+            });
+        </script>
     </head>
     <body>
-        <!-- <h1 align="center"><p><img src="esp-logo.png" width="42" height="42" style="vertical-align:middle"></img> ESP Tool</p></h1> -->
         <h1 style="font-size:40px;text-align:center;">ESP Web Flasher v2</h1>
-        <h5 align="center">Open with Chrome/Edge, Support ESP32-s2 & 8266, Install ESP driver first (<a target="_blank" href="https://psgo.lanzoub.com/iLLi91wwvu4b">Download</a>), <a target="_blank" href="https://psgo.github.io/esptool/">ESP Web Flasher v1</a></h4>
-        <div id="safariErr" style="display:none"><p align="center" style="color:red">This tool is not supported on Safari browser!</p>
-        </div>
+        <h5 align="center">Open with Chrome/Edge, Support ESP32-s2 & 8266, Install ESP driver first (<a target="_blank" href="https://psgo.lanzoub.com/iLLi91wwvu4b">Download</a>), <a target="_blank" href="https://psgo.github.io/esptool/">ESP Web Flasher v1</a></h5>
+        
         <div align="center" style="display:none">
             <a class="btn btn-info" href="./docs/index.html">View the API Documentation</a>
-
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="debugLogging" value="">
                 <label class="form-check-label" for="debugLogging">Show Debug log</label>
             </div>
-          </div>
+        </div>
+
         <div class="container" id="main">
             <hr/>
             <div id="program">
@@ -60,7 +55,7 @@ document.onreadystatechange = function () {
                 <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Connect" />
                 <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Disconnect" />
                 <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Erase Flash" />
-				<input class="btn btn-info btn-sm" type="button" id="copyTraceButton" value="Copy Trace" />
+                <input class="btn btn-info btn-sm" type="button" id="copyTraceButton" value="Copy Trace" />
                 <br>
 
                 <div class="alert alert-danger alert-dismissible" id="alertDiv" style="display:none; margin-top:10px">
@@ -80,8 +75,7 @@ document.onreadystatechange = function () {
                         <tbody id="tableBody">
                         </tbody>
                     </table>
-                    <!-- <input class="btn btn-info btn-sm" type="button" id="addFile" value="Add File" /> -->
-					<input class="btn btn-info btn-sm" type="button" id="programButton" value="Start Flashing" />
+                    <input class="btn btn-info btn-sm" type="button" id="programButton" value="Start Flashing" />
                     <input class="btn btn-danger btn-sm" type="button" id="addFile" value="Add more files" />
                 </div>
                 <output id="list"></output>
@@ -105,9 +99,11 @@ document.onreadystatechange = function () {
             </div>
             <div id="terminal"></div>
         </div>
+
+        <a href="#" id="switchToChinese" style="position: absolute; top: 20px; right: 20px;">切换到中文</a>
+
         <script src="index.js" type="module"></script>
         <script>
-            // Safari 3.0+ "[object HTMLElementConstructor]"
             var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
 
             if(isSafari)
@@ -118,12 +114,3 @@ document.onreadystatechange = function () {
         </script>
     </body>
 </html>
-<!-- Global site tag (gtag.js) - Google Analytics统计 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7VRDNYTJ1Y"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-7VRDNYTJ1Y');
-</script>

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>ESP Web Flasher v2 - PSGO</title>
+        <title>ESP 在线刷机 v2 - PSGO</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
         <link
@@ -15,24 +15,18 @@
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
-document.onreadystatechange = function () {
-   if (document.readyState == "complete") {
-        //document.body.style.display = "block";
-	    $('body').show(1000);
-	    $('#loading').hide(500);//关闭动画
-   }else{
-        //document.body.style.display = "none";
-	    $('body').hide(500);
-	    loading(1);//加载动画
-   };
+window.onload = function() {
+    document.body.style.display = "block"; // 页面加载完成后显示页面
 };
+
+document.body.style.display = "none"; // 页面初始时隐藏
 </script>
     </head>
     <body>
         <!-- <h1 align="center"><p><img src="esp-logo.png" width="42" height="42" style="vertical-align:middle"></img> ESP Tool</p></h1> -->
         <h1 style="font-size:40px;text-align:center;">ESP Web Flasher v2</h1>
-        <h5 align="center">Open with Chrome/Edge, Support ESP32-s2 & 8266, Install ESP driver first (<a target="_blank" href="https://psgo.lanzoub.com/iLLi91wwvu4b">Download</a>), <a target="_blank" href="https://psgo.github.io/esptool/">ESP Web Flasher v1</a></h4>
-        <div id="safariErr" style="display:none"><p align="center" style="color:red">This tool is not supported on Safari browser!</p>
+        <h5 align="center">使用Chrome/Edge打开本页、支持ESP32-s2 & 8266、先安装ESP驱动 (<a target="_blank" href="https://psgo.lanzoub.com/iLLi91wwvu4b">下载</a>)、<a target="_blank" href="https://psgo.github.io/esptool/">ESP Web Flasher v1</a></h4>
+        <div id="safariErr" style="display:none"><p align="center" style="color:red">不支持Safari浏览器!</p>
         </div>
         <div align="center" style="display:none">
             <a class="btn btn-info" href="./docs/index.html">View the API Documentation</a>
@@ -45,9 +39,9 @@ document.onreadystatechange = function () {
         <div class="container" id="main">
             <hr/>
             <div id="program">
-                <h3> Program </h3>
-                <label for="baudrates" id="lblBaudrate">Baudrate (Default: 921600):</label>
-                <label style="display:none" id="lblConnTo">Connected to device: </label>
+                <h3>先用数据线连接ESP和电脑</h3>
+                <label for="baudrates" id="lblBaudrate">传输速率 (默认: 921600):</label>
+                <label style="display:none" id="lblConnTo">已连接到ESP: </label>
                 <select name="baudrates" id="baudrates">
                     <option value="921600">921600</option>
                     <option value="460800">460800</option>
@@ -57,10 +51,10 @@ document.onreadystatechange = function () {
 
                 <br><br>
 
-                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Connect" />
-                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Disconnect" />
-                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Erase Flash" />
-				<input class="btn btn-info btn-sm" type="button" id="copyTraceButton" value="Copy Trace" />
+                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="连接ESP" />
+                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="断开ESP" />
+                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="清除ESP数据" />
+				<input class="btn btn-info btn-sm" type="button" id="copyTraceButton" value="复制信息" />
                 <br>
 
                 <div class="alert alert-danger alert-dismissible" id="alertDiv" style="display:none; margin-top:10px">
@@ -72,8 +66,8 @@ document.onreadystatechange = function () {
                     <table class="table table-striped" id="fileTable">
                         <thead class="thead-light">
                             <tr>
-                                <th>Flash Address (Default for single bin: 0x0000)</th>
-                                <th>Bin File</th>
+                                <th>刷入起始位置 (单个Bin文件默认: 0x0000)</th>
+                                <th>请选择电脑中的Bin文件</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -81,8 +75,8 @@ document.onreadystatechange = function () {
                         </tbody>
                     </table>
                     <!-- <input class="btn btn-info btn-sm" type="button" id="addFile" value="Add File" /> -->
-					<input class="btn btn-info btn-sm" type="button" id="programButton" value="Start Flashing" />
-                    <input class="btn btn-danger btn-sm" type="button" id="addFile" value="Add more files" />
+					<input class="btn btn-info btn-sm" type="button" id="programButton" value="开始刷入ESP" />
+                    <input class="btn btn-danger btn-sm" type="button" id="addFile" value="添加更多文件" />
                 </div>
                 <output id="list"></output>
                 <hr/>
@@ -120,10 +114,10 @@ document.onreadystatechange = function () {
 </html>
 <!-- Global site tag (gtag.js) - Google Analytics统计 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7VRDNYTJ1Y"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<!-- <script> -->
+  <!-- window.dataLayer = window.dataLayer || []; -->
+  <!-- function gtag(){dataLayer.push(arguments);} -->
+  <!-- gtag('js', new Date()); -->
 
-  gtag('config', 'G-7VRDNYTJ1Y');
-</script>
+  <!-- gtag('config', 'G-7VRDNYTJ1Y'); -->
+<!-- </script> -->
