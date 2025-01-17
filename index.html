@@ -3,6 +3,18 @@
     <head>
         <meta charset="utf-8" />
         <title>ESP Web Flasher v2 - PSGO</title>
+<script>
+	// Detect user language and redirect to Chinese page if necessary
+		var userLang = navigator.language || navigator.userLanguage; // Get the browser language
+		if (userLang.includes("zh")) {
+			window.location.href = "index_zh.html"; // Redirect to Chinese page if the language is Chinese
+		}
+
+		// Language switch functionality
+		$('#switchToChinese').click(function () {
+			window.location.href = "index_zh.html"; // Switch to Chinese page when clicked
+		});
+</script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
         <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet"/>
@@ -10,28 +22,14 @@
          <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <script>
-            // Detect user language and redirect to Chinese page if necessary
-            document.addEventListener("DOMContentLoaded", function () {
-                var userLang = navigator.language || navigator.userLanguage; // Get the browser language
-                if (userLang.includes("zh")) {
-                    window.location.href = "index_zh.html"; // Redirect to Chinese page if the language is Chinese
-                }
-
-                // Language switch functionality
-                $('#switchToChinese').click(function () {
-                    window.location.href = "index_zh.html"; // Switch to Chinese page when clicked
-                });
-            });
-        </script>
 		
-<script>
-window.onload = function() {
-    document.body.style.display = "block"; // 页面加载完成后显示页面
-};
+<!-- <script> -->
+<!-- window.onload = function() { -->
+    <!-- document.body.style.display = "block"; // 页面加载完成后显示页面 -->
+<!-- }; -->
 
-document.body.style.display = "none"; // 页面初始时隐藏
-</script>
+<!-- document.body.style.display = "none"; // 页面初始时隐藏 -->
+<!-- </script> -->
     </head>
     <body>
         <!-- <h1 align="center"><p><img src="esp-logo.png" width="42" height="42" style="vertical-align:middle"></img> ESP Tool</p></h1> -->
