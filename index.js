@@ -261,15 +261,15 @@ $parcel$export(module.exports, "ROM", () => $2bb77dda76009c14$export$c643cc54d63
 
 var $b573ec460edd35fb$exports = {};
 
-(parcelRequire("aKzDW")).register(new URL("", import.meta.url).toString(), JSON.parse("[\"epDtc\",\"index.8d9987d7.js\",\"17fYX\",\"stub_flasher_32.bc06e557.js\",\"35K3k\",\"stub_flasher_32c2.63c0ddda.js\",\"vZCF2\",\"stub_flasher_32c3.1f4c3acb.js\",\"d4LkX\",\"stub_flasher_32c5.2d91a6ff.js\",\"cJDqv\",\"stub_flasher_32c6.7e3cbb90.js\",\"3OCVy\",\"stub_flasher_32c61.82908af8.js\",\"eXP7h\",\"stub_flasher_32h2.42b7a893.js\",\"fa8eB\",\"stub_flasher_32p4.90dd8add.js\",\"9N6hS\",\"stub_flasher_32s2.38b7c15e.js\",\"gmXBg\",\"stub_flasher_32s3.d91381f3.js\",\"hHpLC\",\"stub_flasher_8266.4f4307c8.js\",\"gbY4J\",\"esp32.3f2660d9.js\",\"jJvTY\",\"esp32c2.11753622.js\",\"ELGPK\",\"esp32c3.566f2292.js\",\"8itJW\",\"esp32c6.5b449d27.js\",\"3qJU9\",\"esp32c61.7aaa628f.js\",\"fk33s\",\"esp32c5.9aff0e3e.js\",\"dJVWW\",\"esp32h2.a06e4253.js\",\"at51o\",\"esp32s3.e35b3ad8.js\",\"2pBtn\",\"esp32s2.315a8ac7.js\",\"cXe3K\",\"esp8266.29587a4a.js\",\"i7djm\",\"esp32p4.433a1fb3.js\"]"));
+(parcelRequire("aKzDW")).register(new URL("", import.meta.url).toString(), JSON.parse("[\"epDtc\",\"index.0c47463a.js\",\"17fYX\",\"stub_flasher_32.bc06e557.js\",\"35K3k\",\"stub_flasher_32c2.63c0ddda.js\",\"vZCF2\",\"stub_flasher_32c3.1f4c3acb.js\",\"d4LkX\",\"stub_flasher_32c5.2d91a6ff.js\",\"cJDqv\",\"stub_flasher_32c6.7e3cbb90.js\",\"3OCVy\",\"stub_flasher_32c61.82908af8.js\",\"eXP7h\",\"stub_flasher_32h2.42b7a893.js\",\"fa8eB\",\"stub_flasher_32p4.90dd8add.js\",\"9N6hS\",\"stub_flasher_32s2.38b7c15e.js\",\"gmXBg\",\"stub_flasher_32s3.d91381f3.js\",\"hHpLC\",\"stub_flasher_8266.4f4307c8.js\",\"gbY4J\",\"esp32.3f2660d9.js\",\"jJvTY\",\"esp32c2.11753622.js\",\"ELGPK\",\"esp32c3.566f2292.js\",\"8itJW\",\"esp32c6.5b449d27.js\",\"3qJU9\",\"esp32c61.7aaa628f.js\",\"fk33s\",\"esp32c5.9aff0e3e.js\",\"dJVWW\",\"esp32h2.a06e4253.js\",\"at51o\",\"esp32s3.e35b3ad8.js\",\"2pBtn\",\"esp32s2.315a8ac7.js\",\"cXe3K\",\"esp8266.29587a4a.js\",\"i7djm\",\"esp32p4.433a1fb3.js\"]"));
 
 /**
  * Represents a Espressif chip error.
- */ class $ebb8d82b6f845895$export$5b519f82636185ec extends Error {
+ */ class $f1887d9f177795ef$export$5b519f82636185ec extends Error {
 }
 /**
  * Represents a Espressif timeout chip error.
- */ class $ebb8d82b6f845895$export$66d311bf29d5c89c extends $ebb8d82b6f845895$export$5b519f82636185ec {
+ */ class $f1887d9f177795ef$export$66d311bf29d5c89c extends $f1887d9f177795ef$export$5b519f82636185ec {
 }
 
 
@@ -6072,8 +6072,9 @@ function $c14fcc49e58a64cf$export$7e57cd56df6c9bb5(dataStr) {
                 const { ESP32C6ROM: ESP32C6ROM } = await (parcelRequire("dvhVK"));
                 return new ESP32C6ROM();
             }
-        case 0x33f0206f:
         case 0x2421606f:
+        case 0x33f0206f:
+        case 0x4f81606f:
             {
                 const { ESP32C61ROM: ESP32C61ROM } = await (parcelRequire("i252s"));
                 return new ESP32C61ROM();
@@ -6124,6 +6125,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
      * const myLoader = new ESPLoader({ transport: Transport, baudrate: number, terminal?: IEspLoaderTerminal });
      * ```
      */ constructor(options){
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         this.ESP_RAM_BLOCK = 0x1800;
         this.ESP_FLASH_BEGIN = 0x02;
         this.ESP_FLASH_DATA = 0x03;
@@ -6192,6 +6194,12 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         this.FLASH_WRITE_SIZE = 0x4000;
         this.transport = options.transport;
         this.baudrate = options.baudrate;
+        this.resetConstructors = {
+            classicReset: (transport, resetDelay)=>new (0, $c7981c93d06fe700$export$4de7cfbc0d78cb8e)(transport, resetDelay),
+            customReset: (transport, sequenceString)=>new (0, $c7981c93d06fe700$export$587746fadce59bb9)(transport, sequenceString),
+            hardReset: (transport, usingUsbOtg)=>new (0, $c7981c93d06fe700$export$529f1679a228f28a)(transport, usingUsbOtg),
+            usbJTAGSerialReset: (transport)=>new (0, $c7981c93d06fe700$export$f728aa04f347362c)(transport)
+        };
         if (options.serialOptions) this.serialOptions = options.serialOptions;
         if (options.romBaudrate) this.romBaudrate = options.romBaudrate;
         if (options.terminal) {
@@ -6201,6 +6209,10 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         if (typeof options.debugLogging !== "undefined") this.debugLogging = options.debugLogging;
         if (options.port) this.transport = new (0, $4616b1a2f9a5b082$export$86495b081fef8e52)(options.port);
         if (typeof options.enableTracing !== "undefined") this.transport.tracing = options.enableTracing;
+        if ((_a = options.resetConstructors) === null || _a === void 0 ? void 0 : _a.classicReset) this.resetConstructors.classicReset = (_b = options.resetConstructors) === null || _b === void 0 ? void 0 : _b.classicReset;
+        if ((_c = options.resetConstructors) === null || _c === void 0 ? void 0 : _c.customReset) this.resetConstructors.customReset = (_d = options.resetConstructors) === null || _d === void 0 ? void 0 : _d.customReset;
+        if ((_e = options.resetConstructors) === null || _e === void 0 ? void 0 : _e.hardReset) this.resetConstructors.hardReset = (_f = options.resetConstructors) === null || _f === void 0 ? void 0 : _f.hardReset;
+        if ((_g = options.resetConstructors) === null || _g === void 0 ? void 0 : _g.usbJTAGSerialReset) this.resetConstructors.usbJTAGSerialReset = (_h = options.resetConstructors) === null || _h === void 0 ? void 0 : _h.usbJTAGSerialReset;
         this.info("esptool.js");
         this.info("Serial port " + this.transport.getInfo());
     }
@@ -6350,11 +6362,11 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
                 ];
                 else if (data[0] != 0 && data[1] == this.ROM_INVALID_RECV_MSG) {
                     await this.flushInput();
-                    throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("unsupported command error");
+                    throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("unsupported command error");
                 }
             }
         }
-        throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("invalid response");
+        throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("invalid response");
     }
     /**
      * Write a serial command to the chip
@@ -6450,7 +6462,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
      * @returns {string} - Returns 'success' or 'error' message.
      */ async _connectAttempt(mode = "default_reset", resetStrategy) {
         this.debug("_connect_attempt " + mode);
-        await resetStrategy.reset();
+        if (resetStrategy) await resetStrategy.reset();
         const waitingBytes = this.transport.inWaiting();
         const readBytes = await this.transport.newRead(waitingBytes > 0 ? waitingBytes : 1, this.DEFAULT_TIMEOUT);
         const binaryString = Array.from(readBytes, (byte)=>String.fromCharCode(byte)).join("");
@@ -6482,23 +6494,36 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         }
         return lastError;
     }
-    constructResetSequency() {
-        if (this.transport.getPid() === this.USB_JTAG_SERIAL_PID) {
-            // Custom reset sequence, which is required when the device
+    /**
+     * Constructs a sequence of reset strategies based on the OS,
+     * used ESP chip, external settings, and environment variables.
+     * Returns a tuple of one or more reset strategies to be tried sequentially.
+     * @param {string} mode - Reset mode to use
+     * @returns {ResetStrategy[]} - Array of reset strategies
+     */ constructResetSequence(mode) {
+        if (mode !== "no_reset") {
+            if (mode === "usb_reset" || this.transport.getPid() === this.USB_JTAG_SERIAL_PID) // Custom reset sequence, which is required when the device
             // is connecting via its USB-JTAG-Serial peripheral
-            this.debug("using USB JTAG Serial Reset");
-            return [
-                new (0, $c7981c93d06fe700$export$f728aa04f347362c)(this.transport)
-            ];
-        } else {
-            const DEFAULT_RESET_DELAY = 50;
-            const EXTRA_DELAY = DEFAULT_RESET_DELAY + 500;
-            this.debug("using Classic Serial Reset");
-            return [
-                new (0, $c7981c93d06fe700$export$4de7cfbc0d78cb8e)(this.transport, DEFAULT_RESET_DELAY),
-                new (0, $c7981c93d06fe700$export$4de7cfbc0d78cb8e)(this.transport, EXTRA_DELAY)
-            ];
+            {
+                if (this.resetConstructors.usbJTAGSerialReset) {
+                    this.debug("using USB JTAG Serial Reset");
+                    return [
+                        this.resetConstructors.usbJTAGSerialReset(this.transport)
+                    ];
+                }
+            } else {
+                const DEFAULT_RESET_DELAY = 50;
+                const EXTRA_DELAY = DEFAULT_RESET_DELAY + 500;
+                if (this.resetConstructors.classicReset) {
+                    this.debug("using Classic Serial Reset");
+                    return [
+                        this.resetConstructors.classicReset(this.transport, DEFAULT_RESET_DELAY),
+                        this.resetConstructors.classicReset(this.transport, EXTRA_DELAY)
+                    ];
+                }
+            }
         }
+        return [];
     }
     /**
      * Perform a connection to chip.
@@ -6509,20 +6534,20 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         let resp;
         this.info("Connecting...", false);
         await this.transport.connect(this.romBaudrate, this.serialOptions);
-        const resetSequences = this.constructResetSequency();
+        const resetSequences = this.constructResetSequence(mode);
         for(let i = 0; i < attempts; i++){
-            const resetSequence = resetSequences[i % resetSequences.length];
+            const resetSequence = resetSequences.length > 0 ? resetSequences[i % resetSequences.length] : null;
             resp = await this._connectAttempt(mode, resetSequence);
             if (resp === "success") break;
         }
-        if (resp !== "success") throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Failed to connect with the device");
+        if (resp !== "success") throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Failed to connect with the device");
         this.debug("Connect attempt successful.");
         this.info("\n\r", false);
         if (!detecting) {
             const chipMagicValue = await this.readReg(this.CHIP_DETECT_MAGIC_REG_ADDR) >>> 0;
             this.debug("Chip Magic " + chipMagicValue.toString(16));
             const chip = await $b9be20b2c9078c9b$var$magic2Chip(chipMagicValue);
-            if (this.chip === null) throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)(`Unexpected CHIP magic value ${chipMagicValue}. Failed to autodetect chip type.`);
+            if (this.chip === null) throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)(`Unexpected CHIP magic value ${chipMagicValue}. Failed to autodetect chip type.`);
             else this.chip = chip;
         }
     }
@@ -6572,8 +6597,8 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
                     ]
                 ];
                 for (const [stubStart, stubEnd] of areasToCheck){
-                    if (loadStart < stubEnd && loadEnd > stubStart) throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)(`Software loader is resident at 0x${stubStart.toString(16).padStart(8, "0")}-0x${stubEnd.toString(16).padStart(8, "0")}. 
-            Can't load binary at overlapping address range 0x${loadStart.toString(16).padStart(8, "0")}-0x${loadEnd.toString(16).padStart(8, "0")}. 
+                    if (loadStart < stubEnd && loadEnd > stubStart) throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)(`Software loader is resident at 0x${stubStart.toString(16).padStart(8, "0")}-0x${stubEnd.toString(16).padStart(8, "0")}.
+            Can't load binary at overlapping address range 0x${loadStart.toString(16).padStart(8, "0")}-0x${loadEnd.toString(16).padStart(8, "0")}.
             Either change binary loading address, or use the no-stub option to disable the software loader.`);
                 }
             }
@@ -6768,8 +6793,8 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         };
         const SPI_CMD_USR = 262144;
         const SPI_USR2_COMMAND_LEN_SHIFT = 28;
-        if (readBits > 32) throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Reading more than 32 bits back from a SPI flash operation is unsupported");
-        if (data.length > 64) throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Writing more than 64 bytes of data with one SPI command is unsupported");
+        if (readBits > 32) throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Reading more than 32 bits back from a SPI flash operation is unsupported");
+        if (data.length > 64) throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Writing more than 64 bytes of data with one SPI command is unsupported");
         const dataBits = data.length * 8;
         const oldSpiUsr = await this.readReg(SPI_USR_REG);
         const oldSpiUsr2 = await this.readReg(SPI_USR2_REG);
@@ -6799,7 +6824,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
             val = await this.readReg(SPI_CMD_REG) & SPI_CMD_USR;
             if (val == 0) break;
         }
-        if (i === 10) throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("SPI command did not complete in time");
+        if (i === 10) throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("SPI command did not complete in time");
         const stat = await this.readReg(SPI_W0_REG);
         await this.writeReg(SPI_USR_REG, oldSpiUsr);
         await this.writeReg(SPI_USR2_REG, oldSpiUsr2);
@@ -6853,7 +6878,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         pkt = this._appendArray(pkt, this._intToByteArray(0x1000));
         pkt = this._appendArray(pkt, this._intToByteArray(1024));
         const res = await this.checkCommand("read flash", this.ESP_READ_FLASH, pkt);
-        if (res != 0) throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Failed to read memory: " + res);
+        if (res != 0) throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Failed to read memory: " + res);
         let resp = new Uint8Array(0);
         while(resp.length < size){
             const { value: packet } = await this.transport.read(this.FLASH_READ_TIMEOUT).next();
@@ -6863,7 +6888,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
                     await this.transport.write(this._intToByteArray(resp.length));
                     if (onPacketReceived) onPacketReceived(packet, resp.length, size);
                 }
-            } else throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Failed to read memory: " + packet);
+            } else throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Failed to read memory: " + packet);
         }
         return resp;
     }
@@ -6900,7 +6925,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         await this.memFinish(stubFlasher.entry);
         const { value: packetResult } = await this.transport.read(this.DEFAULT_TIMEOUT).next();
         const packetStr = String.fromCharCode(...packetResult);
-        if (packetStr !== "OHAI") throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)(`Failed to start stub. Unexpected response ${packetStr}`);
+        if (packetStr !== "OHAI") throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)(`Failed to start stub. Unexpected response ${packetStr}`);
         this.info("Stub running...");
         this.IS_STUB = true;
         return this.chip;
@@ -6939,7 +6964,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
      * @param {string} flsz Flash size to request
      * @returns {number} Flash size number
      */ parseFlashSizeArg(flsz) {
-        if (typeof this.chip.FLASH_SIZES[flsz] === "undefined") throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Flash size " + flsz + " is not supported by this chip type. Supported sizes: " + this.chip.FLASH_SIZES);
+        if (typeof this.chip.FLASH_SIZES[flsz] === "undefined") throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Flash size " + flsz + " is not supported by this chip type. Supported sizes: " + this.chip.FLASH_SIZES);
         return this.chip.FLASH_SIZES[flsz];
     }
     /**
@@ -7000,7 +7025,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         if (options.flashSize !== "keep") {
             const flashEnd = this.flashSizeBytes(options.flashSize);
             for(let i = 0; i < options.fileArray.length; i++){
-                if (options.fileArray[i].data.length + options.fileArray[i].address > flashEnd) throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)(`File ${i + 1} doesn't fit in the available flash`);
+                if (options.fileArray[i].data.length + options.fileArray[i].address > flashEnd) throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)(`File ${i + 1} doesn't fit in the available flash`);
             }
         }
         if (this.IS_STUB === true && options.eraseAll === true) await this.eraseFlash();
@@ -7061,7 +7086,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
                     await this.flashDeflBlock(block, seq, timeout);
                     if (this.IS_STUB) // Stub ACKs when block is received, then writes to flash while receiving the block after it
                     timeout = blockTimeout;
-                } else throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Yet to handle Non Compressed writes");
+                } else throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Yet to handle Non Compressed writes");
                 bytesSent += block.length;
                 image = image.slice(this.FLASH_WRITE_SIZE, image.length);
                 seq++;
@@ -7076,7 +7101,7 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
                 if (new String(res).valueOf() != new String(calcmd5).valueOf()) {
                     this.info("File  md5: " + calcmd5);
                     this.info("Flash md5: " + res);
-                    throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("MD5 of file does not match data in flash!");
+                    throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("MD5 of file does not match data in flash!");
                 } else this.info("Hash of data verified.");
             }
         }
@@ -7104,23 +7129,49 @@ class $b9be20b2c9078c9b$export$b0f7a6c745790308 {
         return this.DETECTED_FLASH_SIZES_NUM[flidLowbyte];
     }
     /**
-     * Perform a chip hard reset by setting RTS to LOW and then HIGH.
-     */ async hardReset() {
-        await this.transport.setRTS(true); // EN->LOW
-        await this._sleep(100);
-        await this.transport.setRTS(false);
-    }
-    /**
      * Soft reset the device chip. Soft reset with run user code is the closest.
-     */ async softReset() {
+     * @param {boolean} stayInBootloader Flag to indicate if to stay in bootloader
+     */ async softReset(stayInBootloader) {
         if (!this.IS_STUB) {
+            if (stayInBootloader) return; // ROM bootloader is already in bootloader!
             // "run user code" is as close to a soft reset as we can do
             await this.flashBegin(0, 0);
             await this.flashFinish(false);
-        } else if (this.chip.CHIP_NAME != "ESP8266") throw new (0, $ebb8d82b6f845895$export$5b519f82636185ec)("Soft resetting is currently only supported on ESP8266");
-        else // running user code from stub loader requires some hacks
+        } else if (this.chip.CHIP_NAME != "ESP8266") throw new (0, $f1887d9f177795ef$export$5b519f82636185ec)("Soft resetting is currently only supported on ESP8266");
+        else if (stayInBootloader) {
+            // soft resetting from the stub loader
+            // will re-load the ROM bootloader
+            await this.flashBegin(0, 0);
+            await this.flashFinish(true);
+        } else // running user code from stub loader requires some hacks
         // in the stub loader
         await this.command(this.ESP_RUN_USER_CODE, undefined, undefined, false);
+    }
+    /**
+     * Execute this function to execute after operation reset functions.
+     * @param {After} mode After operation mode. Default is 'hard_reset'.
+     * @param { boolean } usingUsbOtg For 'hard_reset' to specify if using USB-OTG
+     */ async after(mode = "hard_reset", usingUsbOtg) {
+        switch(mode){
+            case "hard_reset":
+                if (this.resetConstructors.hardReset) {
+                    this.info("Hard resetting via RTS pin...");
+                    const hardReset = this.resetConstructors.hardReset(this.transport, usingUsbOtg);
+                    await hardReset.reset();
+                }
+                break;
+            case "soft_reset":
+                this.info("Soft resetting...");
+                await this.softReset(false);
+                break;
+            case "no_reset_stub":
+                this.info("Staying in flasher stub.");
+                break;
+            default:
+                this.info("Staying in bootloader.");
+                if (this.IS_STUB) this.softReset(true);
+                break;
+        }
     }
 }
 
@@ -7637,11 +7688,11 @@ const $382e02c9bbd5d50b$var$espLoaderTerminal = {
     }
 };
 $382e02c9bbd5d50b$var$connectButton.onclick = async ()=>{
-    if ($382e02c9bbd5d50b$var$device === null) {
-        $382e02c9bbd5d50b$var$device = await $382e02c9bbd5d50b$var$serialLib.requestPort({});
-        $382e02c9bbd5d50b$var$transport = new (0, $4616b1a2f9a5b082$export$86495b081fef8e52)($382e02c9bbd5d50b$var$device, true);
-    }
     try {
+        if ($382e02c9bbd5d50b$var$device === null) {
+            $382e02c9bbd5d50b$var$device = await $382e02c9bbd5d50b$var$serialLib.requestPort({});
+            $382e02c9bbd5d50b$var$transport = new (0, $4616b1a2f9a5b082$export$86495b081fef8e52)($382e02c9bbd5d50b$var$device, true);
+        }
         const flashOptions = {
             transport: $382e02c9bbd5d50b$var$transport,
             baudrate: parseInt($382e02c9bbd5d50b$var$baudrates.value),
@@ -7650,23 +7701,23 @@ $382e02c9bbd5d50b$var$connectButton.onclick = async ()=>{
         };
         $382e02c9bbd5d50b$var$esploader = new (0, $b9be20b2c9078c9b$export$b0f7a6c745790308)(flashOptions);
         $382e02c9bbd5d50b$var$chip = await $382e02c9bbd5d50b$var$esploader.main();
-    // Temporarily broken
-    // await esploader.flashId();
+        // Temporarily broken
+        // await esploader.flashId();
+        console.log("Settings done for :" + $382e02c9bbd5d50b$var$chip);
+        $382e02c9bbd5d50b$var$lblBaudrate.style.display = "none";
+        $382e02c9bbd5d50b$var$lblConnTo.innerHTML = "Connected to device: " + $382e02c9bbd5d50b$var$chip;
+        $382e02c9bbd5d50b$var$lblConnTo.style.display = "block";
+        $382e02c9bbd5d50b$var$baudrates.style.display = "none";
+        $382e02c9bbd5d50b$var$connectButton.style.display = "none";
+        $382e02c9bbd5d50b$var$disconnectButton.style.display = "initial";
+        $382e02c9bbd5d50b$var$traceButton.style.display = "initial";
+        $382e02c9bbd5d50b$var$eraseButton.style.display = "initial";
+        $382e02c9bbd5d50b$var$filesDiv.style.display = "initial";
+        $382e02c9bbd5d50b$var$consoleDiv.style.display = "none";
     } catch (e) {
         console.error(e);
         $382e02c9bbd5d50b$var$term.writeln(`Error: ${e.message}`);
     }
-    console.log("Settings done for :" + $382e02c9bbd5d50b$var$chip);
-    $382e02c9bbd5d50b$var$lblBaudrate.style.display = "none";
-    $382e02c9bbd5d50b$var$lblConnTo.innerHTML = "Connected to device: " + $382e02c9bbd5d50b$var$chip;
-    $382e02c9bbd5d50b$var$lblConnTo.style.display = "block";
-    $382e02c9bbd5d50b$var$baudrates.style.display = "none";
-    $382e02c9bbd5d50b$var$connectButton.style.display = "none";
-    $382e02c9bbd5d50b$var$disconnectButton.style.display = "initial";
-    $382e02c9bbd5d50b$var$traceButton.style.display = "initial";
-    $382e02c9bbd5d50b$var$eraseButton.style.display = "initial";
-    $382e02c9bbd5d50b$var$filesDiv.style.display = "initial";
-    $382e02c9bbd5d50b$var$consoleDiv.style.display = "none";
 };
 $382e02c9bbd5d50b$var$traceButton.onclick = async ()=>{
     if ($382e02c9bbd5d50b$var$transport) $382e02c9bbd5d50b$var$transport.returnTrace();
@@ -7865,6 +7916,7 @@ $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
             calculateMD5Hash: (image)=>CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image))
         };
         await $382e02c9bbd5d50b$var$esploader.writeFlash(flashOptions);
+        await $382e02c9bbd5d50b$var$esploader.after();
     } catch (e) {
         console.error(e);
         $382e02c9bbd5d50b$var$term.writeln(`Error: ${e.message}`);
@@ -7879,4 +7931,4 @@ $382e02c9bbd5d50b$var$programButton.onclick = async ()=>{
 $382e02c9bbd5d50b$var$addFileButton.onclick(undefined);
 
 
-//# sourceMappingURL=index.8d9987d7.js.map
+//# sourceMappingURL=index.0c47463a.js.map
